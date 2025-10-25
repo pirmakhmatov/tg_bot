@@ -1,112 +1,165 @@
 import os
 import google.generativeai as genai
 from dotenv import load_dotenv
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, ChatAction
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
 import mimetypes
 import sys
 import types
+import datetime
 
+# --- IMAGE HANDLING PATCH ---
 imghdr = types.ModuleType("imghdr")
-
 def what(file, h=None):
     kind = mimetypes.guess_type(file)[0]
     if kind and "image" in kind:
         return kind.split("/")[-1]
     return None
-
 imghdr.what = what
 sys.modules["imghdr"] = imghdr
 
-# .env fayldan yuklash
+# --- ENV ---
 load_dotenv()
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 GEMINI_KEY = os.getenv("GEMINI_KEY")
 
-# Gemini API sozlash
+if not TELEGRAM_TOKEN or not GEMINI_KEY:
+    print("❌ TELEGRAM_TOKEN yoki GEMINI_KEY topilmadi!")
+    exit()
+
+# --- GEMINI API ---
 genai.configure(api_key=GEMINI_KEY)
 model = genai.GenerativeModel("models/gemini-2.5-flash")
 
-# Kanal ma'lumotlari
+# --- CHANNEL ---
 CHANNEL_USERNAME = "@pirmaxmatovs"
 CHANNEL_LINK = "https://t.me/pirmaxmatovs"
 
-# Foydalanuvchi a’zomi-yo‘qmi tekshiruvchi funksiya
+# --- ADMINS ---
+ADMINS = [1289085137, 5492583026]
+  # <-- Bu yerga o‘z Telegram ID'ingizni qo‘ying
+
+# --- USER DATABASE (in-memory) ---
+USER_DATA = {}  # {user_id: {"history": [], "last_seen": date, "count": int}}
+
+# --- CHECK SUBSCRIPTION ---
 def is_subscribed(update: Update, context: CallbackContext):
     try:
         user_id = update.effective_user.id
-        chat_member = context.bot.get_chat_member(CHANNEL_USERNAME, user_id)
-        return chat_member.status in ["member", "administrator", "creator"]
+        status = context.bot.get_chat_member(CHANNEL_USERNAME, user_id).status
+        return status in ["member", "administrator", "creator"]
     except Exception:
         return False
 
-# /start komandasi
+# --- /start ---
 def start(update: Update, context: CallbackContext):
+    user_id = update.effective_user.id
+    USER_DATA.setdefault(user_id, {"history": [], "last_seen": datetime.date.today(), "count": 0})
+    
     if not is_subscribed(update, context):
         keyboard = [[InlineKeyboardButton("✅ Kanalga qo‘shilish", url=CHANNEL_LINK)]]
-        reply_markup = InlineKeyboardMarkup(keyboard)
         update.message.reply_text(
-            f"👋 Salom! Men bilan gaplashishdan oldin {CHANNEL_USERNAME} kanaliga qo‘shiling!",
-            reply_markup=reply_markup
+            f"👋 Salom! Botdan foydalanish uchun avval {CHANNEL_USERNAME} kanaliga qo‘shiling!",
+            reply_markup=InlineKeyboardMarkup(keyboard)
         )
     else:
         update.message.reply_text("✅ Siz kanal a’zosisiz, endi savol berishingiz mumkin!")
 
-# Asosiy handler
+# --- SPECIAL RESPONSES ---
+SPECIAL_RESPONSES = {
+    "kimsan": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
+    "who are you": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
+    "кто ты": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
+    "kimliging": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
+    "creator": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
+    "yaratgan": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
+    "yaratuvching": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
+    "создатель": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
+    "yaratuvchi": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
+}
+
+# --- MESSAGE HANDLER ---
+DAILY_LIMIT = 200  # Kunlik AI limit
+
 def handle_message(update: Update, context: CallbackContext):
+    user_id = update.effective_user.id
+    today = datetime.date.today()
+    user_record = USER_DATA.setdefault(user_id, {"history": [], "last_seen": today, "count": 0})
+
     if not is_subscribed(update, context):
         keyboard = [[InlineKeyboardButton("✅ Kanalga qo‘shilish", url=CHANNEL_LINK)]]
-        reply_markup = InlineKeyboardMarkup(keyboard)
         update.message.reply_text(
             "⚠️ Botdan foydalanish uchun avval kanalga qo‘shiling!",
-            reply_markup=reply_markup
+            reply_markup=InlineKeyboardMarkup(keyboard)
         )
+        return
+
+    # Reset count if new day
+    if user_record["last_seen"] != today:
+        user_record["count"] = 0
+        user_record["last_seen"] = today
+
+    if user_record["count"] >= DAILY_LIMIT:
+        update.message.reply_text(f"⚠️ Bugun siz AI bilan {DAILY_LIMIT} marta so‘rash limitini oshdingiz!")
         return
 
     user_text = update.message.text.strip().lower()
-    context.bot.send_chat_action(chat_id=update.effective_chat.id, action="typing")
+    context.bot.send_chat_action(chat_id=update.effective_chat.id, action=ChatAction.TYPING)
 
-    # --- SPECIAL JAVOBLAR ---
-    # "Sen kimsan?" turidagi savollar
-    if any(word in user_text for word in ["kimsan", "who are you", "кто ты", "kimliging"]):
-        response_text = "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov"
-        update.message.reply_text(response_text)
-        return
+    # SPECIAL RESPONSES
+    for key, value in SPECIAL_RESPONSES.items():
+        if key in user_text:
+            update.message.reply_text(value)
+            return
 
-    # "Creator kim?" turidagi savollar
-    if any(word in user_text for word in ["creator", "yaratgan", "yaratuvching", "создатель", "yaratuvchi"]):
-        response_text = "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov"
-        update.message.reply_text(response_text)
-        return
-
-    # --- ODDIY AI JAVOB ---
+    # AI RESPONSE
     try:
+        history = user_record["history"] + [f"User: {user_text}"]
         response = model.generate_content(
-            f"Foydalanuvchi: {user_text}\n\nJavobni foydalanuvchi yozgan tilida yozing."
+            f"{' '.join(history)}\nAI javobini yozing:"
         )
-        ai_text = (response.text or "").strip()
-        final_text = ai_text + "\n\n🤖 Bot made by @pirmaxmatov"
-        update.message.reply_text(final_text)
-
+        ai_text = response.text.strip()
+        update.message.reply_text(f"{ai_text}\n\n🤖 Bot made by @pirmaxmatov")
+        # Update history
+        user_record["history"].append(f"User: {user_text}")
+        user_record["history"].append(f"AI: {ai_text}")
+        user_record["count"] += 1
     except Exception as e:
-        update.message.reply_text(
-            f"⚠️ Xato: {e}\n\n🤖 Bot made by @pirmaxmatov"
-        )
+        update.message.reply_text(f"⚠️ Xato: {e}")
 
-# Asosiy funksiya
-def main():
-    if not TELEGRAM_TOKEN:
-        print("❌ Xato: TELEGRAM_TOKEN topilmadi. .env faylni tekshiring!")
+# --- /stats (ADMIN) ---
+def stats_command(update: Update, context: CallbackContext):
+    if update.effective_user.id not in ADMINS:
+        update.message.reply_text("⚠️ Siz admin emassiz!")
         return
+    total_users = len(USER_DATA)
+    subscribed_users = sum(is_subscribed(update, context) for uid in USER_DATA)
+    update.message.reply_text(f"📊 Foydalanuvchilar: {total_users}\n✅ Kanal a’zolari: {subscribed_users}")
 
+# --- /broadcast (ADMIN) ---
+def broadcast_command(update: Update, context: CallbackContext):
+    if update.effective_user.id not in ADMINS:
+        update.message.reply_text("⚠️ Siz admin emassiz!")
+        return
+    message = " ".join(context.args)
+    for uid in USER_DATA:
+        try:
+            context.bot.send_message(chat_id=uid, text=f"📢 Admindan xabar:\n{message}")
+        except:
+            pass
+    update.message.reply_text("✅ Xabar barcha foydalanuvchilarga yuborildi.")
+
+# --- MAIN ---
+def main():
     updater = Updater(TELEGRAM_TOKEN, use_context=True)
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(MessageHandler(Filters.text & ~Filters.command, handle_message))
+    dp.add_handler(CommandHandler("stats", stats_command))
+    dp.add_handler(CommandHandler("broadcast", broadcast_command, pass_args=True))
 
-    print("🤖 Chatbot ishga tushdi... Endi Telegram’da sinab ko‘ring!")
-
+    print("🤖 Chatbot ishga tushdi... Telegram’da sinab ko‘ring!")
     updater.start_polling()
     updater.idle()
 
