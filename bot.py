@@ -3,6 +3,20 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+import mimetypes
+import sys
+import types
+
+imghdr = types.ModuleType("imghdr")
+
+def what(file, h=None):
+    kind = mimetypes.guess_type(file)[0]
+    if kind and "image" in kind:
+        return kind.split("/")[-1]
+    return None
+
+imghdr.what = what
+sys.modules["imghdr"] = imghdr
 
 # .env fayldan yuklash
 load_dotenv()
