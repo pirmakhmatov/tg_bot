@@ -37,7 +37,7 @@ CHANNEL_LINK = "https://t.me/pirmaxmatovs"
 
 # --- ADMINS ---
 ADMINS = [1289085137, 5492583026]
-  # <-- Bu yerga o‘z Telegram ID'ingizni qo‘ying
+  # <-- Telegram bot Admin IDlari 
 
 # --- USER DATABASE (in-memory) ---
 USER_DATA = {}  # {user_id: {"history": [], "last_seen": date, "count": int}}
@@ -63,7 +63,7 @@ def start(update: Update, context: CallbackContext):
             reply_markup=InlineKeyboardMarkup(keyboard)
         )
     else:
-        update.message.reply_text("✅ Siz kanal a’zosisiz, endi savol berishingiz mumkin!")
+        update.message.reply_text(f"✅ Siz allaqachon t.me/spirmaxmatovs a’zosisiz, endi savol berishingiz mumkin! \n\n *Optional* Ok Write about yourself...")
 
 # --- SPECIAL RESPONSES ---
 SPECIAL_RESPONSES = {
@@ -75,11 +75,15 @@ SPECIAL_RESPONSES = {
     "yaratgan": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
     "yaratuvching": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
     "создатель": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
-    "yaratuvchi": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
+    "yaratuvchi": "I am achatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
+    "Pirmaxmatov":"Siz Chatbot ai admini haqida gapiryapsizmi? Agarda shu haqda bo'lsa men u haqdia sizga ma'lumot berolmayman. Mening adminlar haqida ma'lumot berishim taqiqlangan... \n Agarda sizga bu juda zarur bo'lsa @pirmaxmatov ga murojat qiling! \n\n PREMIUM obuna orqali siz har qanday savolga javob olishingiz mumkin",
+    "Og'abek":"Siz Chatbot ai admini haqida gapiryapsizmi? Agarda shu haqda bo'lsa men u haqdia sizga ma'lumot berolmayman. Mening adminlar haqida ma'lumot berishim taqiqlangan... \n Agarda sizga bu juda zarur bo'lsa @pirmaxmatov ga murojat qiling! \n\n PREMIUM obuna orqali siz har qanday savolga javob olishingiz mumkin",
+    "Ogabek":"Siz Chatbot ai admini haqida gapiryapsizmi? Agarda shu haqda bo'lsa men u haqdia sizga ma'lumot berolmayman. Mening adminlar haqida ma'lumot berishim taqiqlangan... \n Agarda sizga bu juda zarur bo'lsa @pirmaxmatov ga murojat qiling! \n\n PREMIUM obuna orqali siz har qanday savolga javob olishingiz mumkin",
+    "Fuck": "Siz o'zingiz uchun shu so'zni ishlatishni to'g'ri deb hisoblaysizmi bro, Unda \n F*CK YOU!",
 }
 
 # --- MESSAGE HANDLER ---
-DAILY_LIMIT = 200  # Kunlik AI limit
+DAILY_LIMIT = 200
 
 def handle_message(update: Update, context: CallbackContext):
     user_id = update.effective_user.id
@@ -100,7 +104,7 @@ def handle_message(update: Update, context: CallbackContext):
         user_record["last_seen"] = today
 
     if user_record["count"] >= DAILY_LIMIT:
-        update.message.reply_text(f"⚠️ Bugun siz AI bilan {DAILY_LIMIT} marta so‘rash limitini oshdingiz!")
+        update.message.reply_text(f"⚠️ Bugun siz AI bilan {DAILY_LIMIT} marta so‘rash limitidan oshdingiz!")
         return
 
     user_text = update.message.text.strip().lower()
@@ -139,7 +143,7 @@ def stats_command(update: Update, context: CallbackContext):
 # --- /broadcast (ADMIN) ---
 def broadcast_command(update: Update, context: CallbackContext):
     if update.effective_user.id not in ADMINS:
-        update.message.reply_text("⚠️ Siz admin emassiz!")
+        update.message.reply_text("⚠️ Siz admin emassiz! \n ⚠️ You are not ADMIN!")
         return
     message = " ".join(context.args)
     for uid in USER_DATA:
