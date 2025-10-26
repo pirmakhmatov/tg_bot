@@ -76,10 +76,10 @@ SPECIAL_RESPONSES = {
     "yaratuvching": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
     "создатель": "I am a chatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
     "yaratuvchi": "I am achatbot created by Pirmaxmatov Og’abek (@pirmaxmatov) 🤖 | t.me/pirmaxmatov",
-    "Pirmaxmatov":"Siz Chatbot ai admini haqida gapiryapsizmi? Agarda shu haqda bo'lsa men u haqdia sizga ma'lumot berolmayman. Mening adminlar haqida ma'lumot berishim taqiqlangan... \n Agarda sizga bu juda zarur bo'lsa @pirmaxmatov ga murojat qiling! \n\n PREMIUM obuna orqali siz har qanday savolga javob olishingiz mumkin",
-    "Og'abek":"Siz Chatbot ai admini haqida gapiryapsizmi? Agarda shu haqda bo'lsa men u haqdia sizga ma'lumot berolmayman. Mening adminlar haqida ma'lumot berishim taqiqlangan... \n Agarda sizga bu juda zarur bo'lsa @pirmaxmatov ga murojat qiling! \n\n PREMIUM obuna orqali siz har qanday savolga javob olishingiz mumkin",
-    "Ogabek":"Siz Chatbot ai admini haqida gapiryapsizmi? Agarda shu haqda bo'lsa men u haqdia sizga ma'lumot berolmayman. Mening adminlar haqida ma'lumot berishim taqiqlangan... \n Agarda sizga bu juda zarur bo'lsa @pirmaxmatov ga murojat qiling! \n\n PREMIUM obuna orqali siz har qanday savolga javob olishingiz mumkin",
-    "Fuck": "Siz o'zingiz uchun shu so'zni ishlatishni to'g'ri deb hisoblaysizmi bro, Unda \n F*CK YOU!",
+    "pirmaxmatov":"Siz Chatbot ai admini haqida gapiryapsizmi? Agarda shu haqda bo'lsa men u haqdia sizga ma'lumot berolmayman. Mening adminlar haqida ma'lumot berishim taqiqlangan... \n Agarda sizga bu juda zarur bo'lsa @pirmaxmatov ga murojat qiling! \n\n PREMIUM obuna orqali siz har qanday savolga javob olishingiz mumkin",
+    "og'abek":"Siz Chatbot ai admini haqida gapiryapsizmi? Agarda shu haqda bo'lsa men u haqdia sizga ma'lumot berolmayman. Mening adminlar haqida ma'lumot berishim taqiqlangan... \n Agarda sizga bu juda zarur bo'lsa @pirmaxmatov ga murojat qiling! \n\n PREMIUM obuna orqali siz har qanday savolga javob olishingiz mumkin",
+    "ogabek":"Siz Chatbot ai admini haqida gapiryapsizmi? Agarda shu haqda bo'lsa men u haqdia sizga ma'lumot berolmayman. Mening adminlar haqida ma'lumot berishim taqiqlangan... \n Agarda sizga bu juda zarur bo'lsa @pirmaxmatov ga murojat qiling! \n\n PREMIUM obuna orqali siz har qanday savolga javob olishingiz mumkin",
+    "fuck": "Siz o'zingiz uchun shu so'zni ishlatishni to'g'ri deb hisoblaysizmi bro, Unda \n F*CK YOU!",
 }
 
 # --- MESSAGE HANDLER ---
