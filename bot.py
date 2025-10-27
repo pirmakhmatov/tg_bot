@@ -63,7 +63,7 @@ LANGUAGES = {
         },
         "messages": {
             "welcome": "👋 Xush kelibsiz! Tilni tanlang",
-            "language_set": "✅ Til muvaffaqiyatli o'zgartirildi: {}",
+            "language_set": "✅ Til muvaffaqiyatli o'zgartirildi:{} \n Chatni boshlash uchun nimadir yozing... ",
             "not_subscribed": "⚠️ Botdan foydalanish uchun avval kanalga qo'shiling!",
             "daily_limit": "⚠️ Bugun siz AI bilan {} marta suhbat limitidan oshdingiz!",
             "not_admin": "⚠️ Siz admin emassiz!",
@@ -85,7 +85,7 @@ LANGUAGES = {
         },
         "messages": {
             "welcome": "👋 Welcome! Choose your language",
-            "language_set": "✅ Language successfully changed to: {}",
+            "language_set": "✅ Language successfully changed to: {} \n Write something to start chat...",
             "not_subscribed": "⚠️ Please subscribe to the channel to use the bot!",
             "daily_limit": "⚠️ You've exceeded the daily limit of {} AI conversations!",
             "not_admin": "⚠️ You are not an admin!",
@@ -107,7 +107,7 @@ LANGUAGES = {
         },
         "messages": {
             "welcome": "👋 Добро пожаловать! Выберите язык",
-            "language_set": "✅ Язык успешно изменен на: {}",
+            "language_set": "✅ Язык успешно изменен на: {} \n Write something to start chat...",
             "not_subscribed": "⚠️ Подпишитесь на канал чтобы использовать бота!",
             "daily_limit": "⚠️ Вы превысили дневной лимит в {} AI разговоров!",
             "not_admin": "⚠️ Вы не администратор!",
@@ -129,7 +129,7 @@ LANGUAGES = {
         },
         "messages": {
             "welcome": "👋 환영합니다! 언어를 선택하세요",
-            "language_set": "✅ 언어가 성공적으로 변경되었습니다: {}",
+            "language_set": "✅ 언어가 성공적으로 변경되었습니다: {} \n Write something to start chat...",
             "not_subscribed": "⚠️ 봇을 사용하려면 채널에 가입하세요!",
             "daily_limit": "⚠️ 일일 AI 대화 한도 {}회를 초과했습니다!",
             "not_admin": "⚠️ 관리자가 아닙니다!",
@@ -151,7 +151,7 @@ LANGUAGES = {
         },
         "messages": {
             "welcome": "👋 ¡Bienvenido! Elige tu idioma",
-            "language_set": "✅ Idioma cambiado exitosamente a: {}",
+            "language_set": "✅ Idioma cambiado exitosamente a: {} \n Write something to start chat...",
             "not_subscribed": "⚠️ ¡Suscríbete al canal para usar el bot!",
             "daily_limit": "⚠️ ¡Has excedido el límite diario de {} conversaciones con IA!",
             "not_admin": "⚠️ ¡No eres administrador!",
@@ -173,7 +173,7 @@ LANGUAGES = {
         },
         "messages": {
             "welcome": "👋 أهلاً وسهلاً! اختر لغتك",
-            "language_set": "✅ تم تغيير اللغة بنجاح إلى: {}",
+            "language_set": "✅ تم تغيير اللغة بنجاح إلى: {} \n Write something to start chat...",
             "not_subscribed": "⚠️ يرجى الاشتراك في القناة لاستخدام البوت!",
             "daily_limit": "⚠️ لقد تجاوزت الحد اليومي البالغ {} محادثة ذكية!",
             "not_admin": "⚠️ لست مسؤولاً!",
@@ -195,7 +195,7 @@ LANGUAGES = {
         },
         "messages": {
             "welcome": "👋 Bienvenue! Choisissez votre langue",
-            "language_set": "✅ Langue changée avec succès en: {}",
+            "language_set": "✅ Langue changée avec succès en: {} \n Write something to start chat...",
             "not_subscribed": "⚠️ Veuillez vous abonner à la chaîne pour utiliser le bot!",
             "daily_limit": "⚠️ Vous avez dépassé la limite quotidienne de {} conversations IA!",
             "not_admin": "⚠️ Vous n'êtes pas administrateur!",
@@ -217,7 +217,7 @@ LANGUAGES = {
         },
         "messages": {
             "welcome": "👋 ようこそ！言語を選択してください",
-            "language_set": "✅ 言語が正常に変更されました: {}",
+            "language_set": "✅ 言語が正常に変更されました: {} \n Write something to start chat...",
             "not_subscribed": "⚠️ ボットを使用するにはチャンネルに登録してください！",
             "daily_limit": "⚠️ 1日のAI会話制限{}회를 초과했습니다!",
             "not_admin": "⚠️ 管理者ではありません！",
@@ -239,7 +239,7 @@ LANGUAGES = {
         },
         "messages": {
             "welcome": "👋 Bem-vindo! Escolha seu idioma",
-            "language_set": "✅ Idioma alterado com sucesso para: {}",
+            "language_set": "✅ Idioma alterado com sucesso para: {} \n Write something to start chat...",
             "not_subscribed": "⚠️ Inscreva-se no canal para usar o bot!",
             "daily_limit": "⚠️ Você excedeu o limite diário de {} conversas com IA!",
             "not_admin": "⚠️ Você não é um administrador!",
@@ -957,15 +957,15 @@ def handle_ai_chat(update: Update, context: CallbackContext):
         
         # Add signature in user's language
         signatures = {
-            "uz": "\n\n🤖 @pirmaxmatov AI",
-            "en": "\n\n🤖 @pirmaxmatov AI", 
-            "ru": "\n\n🤖 @pirmaxmatov AI",
-            "ko": "\n\n🤖 @pirmaxmatov AI",
-            "es": "\n\n🤖 @pirmaxmatov AI",
-            "ar": "\n\n🤖 @pirmaxmatov AI",
-            "fr": "\n\n🤖 @pirmaxmatov AI",
-            "ja": "\n\n🤖 @pirmaxmatov AI",
-            "pt": "\n\n🤖 @pirmaxmatov AI"
+            "uz": "\n\n🤖 Bot created by @pirmaxmatov |AI",
+            "en": "\n\n🤖 Bot created by @pirmaxmatov |AI", 
+            "ru": "\n\n🤖 Bot created by @pirmaxmatov |AI",
+            "ko": "\n\n🤖 Bot created by @pirmaxmatov |AI",
+            "es": "\n\n🤖 Bot created by @pirmaxmatov |AI",
+            "ar": "\n\n🤖 Bot created by @pirmaxmatov |AI",
+            "fr": "\n\n🤖 Bot created by @pirmaxmatov |AI",
+            "ja": "\n\n🤖 Bot created by @pirmaxmatov |AI",
+            "pt": "\n\n🤖 Bot created by @pirmaxmatov |AI"
         }
         
         ai_text += signatures.get(lang_code, signatures["uz"])
